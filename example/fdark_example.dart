@@ -11,7 +11,8 @@ final FDB db = FPostgresDB(
   settings: FConnectionSettings(
     maxIdle: 2,
     maxOpen: 10,
-    lifetime: Duration(minutes: 30),
+    idleLifetime: Duration(minutes: 30),
+    openLifetime: Duration(minutes: 5),
   ),
 );
 

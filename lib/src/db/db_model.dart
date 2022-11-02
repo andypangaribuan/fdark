@@ -9,14 +9,16 @@
 part of fdb;
 
 class FConnectionSettings {
-  final Duration lifetime;
   final int maxIdle;
   final int maxOpen;
+  final Duration idleLifetime;
+  final Duration openLifetime;
 
   FConnectionSettings({
-    required this.lifetime,
     required this.maxIdle,
     required this.maxOpen,
+    required this.idleLifetime,
+    required this.openLifetime,
   });
 }
 

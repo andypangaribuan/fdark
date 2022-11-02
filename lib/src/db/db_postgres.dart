@@ -21,6 +21,7 @@ class FPostgresDB extends FDB {
     maxConcurrent: 0,
     maxIdle: settings.maxIdle,
     maxOpen: settings.maxOpen,
+    openLifetime: settings.openLifetime,
   );
   Future<_FPostgresInstance> get _instance => _pool.instance;
 
@@ -36,9 +37,10 @@ class FPostgresDB extends FDB {
     this.scheme = scheme ?? 'public';
     this.settings = settings ??
         FConnectionSettings(
-          lifetime: Duration(minutes: 30),
           maxIdle: 5,
           maxOpen: 10,
+          idleLifetime: Duration(minutes: 30),
+          openLifetime: Duration(minutes: 5),
         );
   }
 

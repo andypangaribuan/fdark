@@ -13,7 +13,7 @@ class _FPostgresInstance extends FDBInstance {
 
   _FPostgresInstance(FPostgresDB fdb) {
     conn = _FPostgresConnection(fdb);
-    lifetime = fdb.settings.lifetime;
+    lifetime = fdb.settings.idleLifetime;
   }
 
   @override

@@ -6,7 +6,10 @@
  * licenses restricting copying, distribution and decompilation.
  */
 
-library fdark;
+part of fuse_maker;
 
-export 'src/db/db.dart';
-export 'src/fuse/fuse_api.dart';
+class _FuseResponse implements FuseResponse {
+  final FuseResponseModel res;
+
+  _FuseResponse(this.res);
+}

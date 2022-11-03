@@ -9,24 +9,5 @@
 part of ffuse;
 
 abstract class FuseAuthHandler {
-  @protected
   Future<FuseAuthResponse> handler(FuseAuthContext ctx);
-}
-
-abstract class FuseHandler {
-  @protected
-  Object? objAuthX;
-
-  @protected
-  Object? objAuthY;
-
-  @protected
-  Future<FuseResponse> handler(FuseContext ctx);
-}
-
-abstract class FuseHeader {
-  operator [](String key);
-  operator []=(String key, String value);
-
-  T? get<T>(String key, {T? defaultValue});
 }

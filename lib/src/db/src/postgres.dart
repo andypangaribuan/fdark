@@ -6,26 +6,38 @@
  * licenses restricting copying, distribution and decompilation.
  */
 
-part of fdb;
+part of postgres_maker;
 
-class FPostgresDB extends FDB {
+class _FPostgresDB implements FPostgresDB {
+  late final FDBInstance Function(FPostgresDB db) _newInstance;
+
+  @override
   final String host;
+  @override
   final int port;
+  @override
   final String name;
+  @override
   final String user;
+  @override
   final String password;
+
+  @override
   late final String scheme;
+  @override
   late final FConnectionSettings settings;
-  late final _pool = FPool<_FPostgresInstance>(
-    newInstance: () => _FPostgresInstance(this),
+
+  late final _pool = FPool<FDBInstance>(
+    newInstance: () => _newInstance(this),
     maxConcurrent: 0,
     maxIdle: settings.maxIdle,
     maxOpen: settings.maxOpen,
     openLifetime: settings.openLifetime,
   );
-  Future<_FPostgresInstance> get _instance => _pool.instance;
+  Future<FDBInstance> get _instance => _pool.instance;
 
-  FPostgresDB({
+  _FPostgresDB({
+    required FDBInstance Function(FPostgresDB db) newInstance,
     required this.host,
     required this.port,
     required this.name,
@@ -34,6 +46,7 @@ class FPostgresDB extends FDB {
     String? scheme,
     FConnectionSettings? settings,
   }) {
+    _newInstance = newInstance;
     this.scheme = scheme ?? 'public';
     this.settings = settings ??
         FConnectionSettings(

@@ -6,4 +6,10 @@
  * licenses restricting copying, distribution and decompilation.
  */
 
-export 'fuse_api.dart';
+part of ffuse;
+
+abstract class FuseHandler {
+  Object? objAuthX;
+  Object? objAuthY;
+  Future<FuseResponse> handler(FuseContext ctx);
+}

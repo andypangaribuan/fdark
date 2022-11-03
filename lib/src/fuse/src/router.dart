@@ -6,23 +6,24 @@
  * licenses restricting copying, distribution and decompilation.
  */
 
-part of ffuse;
+part of fuse_maker;
 
-class FuseRouter {
+class _FuseRouter implements FuseRouter {
   FFuseAuthHandler? _handlerAuthX;
   FFuseAuthHandler? _handlerAuthY;
   final _routeHandlers = <_FuseRouteHandler>[];
 
-  FuseRouter._();
-
+  @override
   void setHandlerAuthX(FFuseAuthHandler handler) {
     _handlerAuthX = handler;
   }
 
+  @override
   void setHandlerAuthY(FFuseAuthHandler handler) {
     _handlerAuthY = handler;
   }
 
+  @override
   void add(String ep, FFuseHandler handler, {bool withAuthX = false, bool withAuthY = false}) {
     final idx = ep.indexOf(':');
     if (idx > -1) {

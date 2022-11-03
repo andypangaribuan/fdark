@@ -8,71 +8,18 @@
 
 part of ffuse;
 
-class _FuseBaseContext {
-  final Request _req;
-  Object? _objAuthX;
-  Object? _objAuthY;
+abstract class FuseAuthContext {
+  FuseHeader get header;
 
-  late final FuseHeader header = _FuseHeader(_req.headers);
+  FuseAuthResponse ok(Object? data);
 
-  _FuseBaseContext(this._req);
+  FuseAuthResponse unauthorized({Object? data, String? message, address, error, Object? metaData});
 }
 
-class FuseAuthContext {
-  final _FuseBaseContext _ctx;
+abstract class FuseContext {
+  FuseHeader get header;
 
-  FuseHeader get header => _ctx.header;
+  FuseResponse ok(Object? data, {String? message, address, error, Object? metaData, Map<String, dynamic>? customMeta});
 
-  FuseAuthContext._(this._ctx);
-
-  FuseAuthResponse ok(Object? data) {
-    return FuseAuthResponse._(isOk: true, authData: data);
-  }
-
-  FuseAuthResponse unauthorized({Object? data, String? message, address, error, Object? metaData}) {
-    final res = FuseResponseModel(
-      data: data,
-      meta: FuseResponseMetaModel(
-        code: 401,
-        status: 'unauthorized',
-        message: message,
-        address: address,
-        error: error,
-        data: metaData,
-      ),
-    );
-
-    return FuseAuthResponse._(res: res);
-  }
-}
-
-class FuseContext {
-  final _FuseBaseContext _ctx;
-
-  FuseHeader get header => _ctx.header;
-
-  FuseContext._(this._ctx);
-
-  FuseResponseModel _getRes(int code, String status, Object? data, String? message, address, error, Object? metaData, Map<String, dynamic>? customMeta) {
-    return FuseResponseModel(
-      data: data,
-      meta: FuseResponseMetaModel(
-        code: code,
-        status: status,
-        message: message,
-        address: address,
-        error: error,
-        data: metaData,
-        customMeta: customMeta,
-      ),
-    );
-  }
-
-  FuseResponse ok(Object? data, {String? message, address, error, Object? metaData, Map<String, dynamic>? customMeta}) {
-    return FuseResponse._(_getRes(200, 'success', data, message, address, error, metaData, customMeta));
-  }
-
-  FuseResponse notFound({Object? data, String? message, address, error, Object? metaData, Map<String, dynamic>? customMeta}) {
-    return FuseResponse._(_getRes(404, 'not-found', data, message, address, error, metaData, customMeta));
-  }
+  FuseResponse notFound({Object? data, String? message, address, error, Object? metaData, Map<String, dynamic>? customMeta});
 }

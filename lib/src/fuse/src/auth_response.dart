@@ -6,22 +6,16 @@
  * licenses restricting copying, distribution and decompilation.
  */
 
-part of ffuse;
+part of fuse_maker;
 
-class FuseAuthResponse {
+class _FuseAuthResponse implements FuseAuthResponse {
   bool _isOk = false;
   Object? _authData;
   FuseResponseModel? _res;
 
-  FuseAuthResponse._({bool isOk = false, Object? authData, FuseResponseModel? res}) {
+  _FuseAuthResponse({bool isOk = false, Object? authData, FuseResponseModel? res}) {
     _isOk = isOk;
     _authData = authData;
     _res = res;
   }
-}
-
-class FuseResponse {
-  final FuseResponseModel _res;
-
-  FuseResponse._(FuseResponseModel res) : _res = res;
 }

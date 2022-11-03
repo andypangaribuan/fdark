@@ -6,7 +6,11 @@
  * licenses restricting copying, distribution and decompilation.
  */
 
-library fdark;
+part of ffuse;
 
-export 'src/db/db.dart';
-export 'src/fuse/fuse_api.dart';
+abstract class FuseHeader {
+  operator [](String key);
+  operator []=(String key, String value);
+
+  T? get<T>(String key, {T? defaultValue});
+}

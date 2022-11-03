@@ -6,7 +6,6 @@
  * licenses restricting copying, distribution and decompilation.
  */
 
-library fdark;
+part of fdb;
 
-export 'src/db/db.dart';
-export 'src/fuse/fuse_api.dart';
+abstract class FDBInstance extends FPoolInstance implements FDB {}

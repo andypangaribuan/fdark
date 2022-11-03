@@ -6,7 +6,14 @@
  * licenses restricting copying, distribution and decompilation.
  */
 
-library fdark;
+part of fuse_maker;
 
-export 'src/db/db.dart';
-export 'src/fuse/fuse_api.dart';
+class _FuseBaseContext {
+  final Request _req;
+  Object? _objAuthX;
+  Object? _objAuthY;
+
+  late final FuseHeader header = _FuseHeader(_req.headers);
+
+  _FuseBaseContext(this._req);
+}

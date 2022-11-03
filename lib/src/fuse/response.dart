@@ -6,7 +6,8 @@
  * licenses restricting copying, distribution and decompilation.
  */
 
-library fdark;
+part of ffuse;
 
-export 'src/db/db.dart';
-export 'src/fuse/fuse_api.dart';
+abstract class FuseAuthResponse {}
+
+abstract class FuseResponse {}

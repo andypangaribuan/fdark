@@ -17,7 +17,12 @@ class _FPostgresInstance extends FDBInstance {
   }
 
   @override
-  Future<List<FDBRow>> query(String sql, {FOnError? onError, FSetError? setError, Map<String, dynamic>? pars}) async {
+  Future<List<FDBRow>> query(
+    String sql, {
+    FOnError? onError,
+    FSetError? setError,
+    Map<String, dynamic>? pars,
+  }) async {
     if (!await conn.open(onError, setError)) {
       return [];
     }

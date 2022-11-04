@@ -12,7 +12,7 @@ dependencies:
   meta: ^1.8.0
   postgres: ^2.5.2
   
-  fdation: ^1.0.2
+  fdation: ^1.0.3
   # fdation:
   #   path: /Users/apangaribuan/repo/github/fdation
 

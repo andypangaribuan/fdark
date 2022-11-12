@@ -24,3 +24,16 @@ class _FDBRow extends FDBRow {
     return fd.convert.to<T>(_dict[key], defaultValue: defaultValue);
   }
 }
+
+class _FDBResponse<T> extends FDBResponse<T> {
+  final FError _err;
+  final T _data;
+
+  @override
+  FError get err => _err;
+
+  @override
+  T get data => _data;
+
+  _FDBResponse(this._err, this._data);
+}

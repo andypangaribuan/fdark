@@ -17,16 +17,22 @@ final FDB db = FPostgresDB(
 );
 
 void main() async {
-  final rows = await db.query('SELECT * FROM users WHERE email=@email', pars: {
-    'email': 'iam.pangaribuan@gmail.com',
-  });
+  final rRows = await db.select(
+    sql: 'SELECT * FROM users WHERE email=@email',
+    pars: {
+      'email': 'iam.pangaribuan@gmail.com',
+    },
+  );
 
-  final users = rows.loopToList((row) => User.fromRow(row));
-  for (final user in users) {
-    print(user.name);
+  if (rRows.err.isError) {
+    print(rRows.err.err);
+  } else {
+    final users = rRows.data.loopToList((row) => User.fromRow(row));
+    for (final user in users) {
+      print(user.name);
+    }
   }
 }
-
 
 class User extends FJsonSerializable {
   int id;

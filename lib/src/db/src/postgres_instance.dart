@@ -10,6 +10,7 @@ part of fdb;
 
 class _FPostgresInstance extends FDBInstance {
   late final _FPostgresConnection conn;
+  PostgreSQLExecutionContext? transactionCtx;
 
   _FPostgresInstance(FPostgresDB fdb) {
     conn = _FPostgresConnection(fdb);
@@ -17,21 +18,50 @@ class _FPostgresInstance extends FDBInstance {
   }
 
   @override
-  Future<List<FDBRow>> query(
-    String sql, {
-    FOnError? onError,
-    FSetError? setError,
-    Map<String, dynamic>? pars,
-  }) async {
-    if (!await conn.open(onError, setError)) {
-      return [];
+  Future<FError> execute({required String sql, Map<String, dynamic>? pars}) async {
+    final err = FError.notError();
+
+    if (transactionCtx == null && !await conn.open(null, () => err)) {
+      return err;
     }
 
-    final result = await asyncTry(
-      onError: onError,
-      setError: setError,
+    await asyncTry(
+      setError: () => err,
       action: () async {
-        final rows = await conn.conn.mappedResultsQuery(sql, substitutionValues: pars);
+        if (transactionCtx != null) {
+          await transactionCtx?.execute(sql, substitutionValues: _transformPars(pars));
+        } else {
+          await conn.conn.execute(sql, substitutionValues: _transformPars(pars));
+        }
+      },
+    );
+
+    return err;
+  }
+
+  @override
+  Future<FDBResponse<FDBRow?>> executeReturn({required String sql, Map<String, dynamic>? pars}) async {
+    final res = await select(sql: sql, pars: pars);
+    return _FDBResponse(res.err, res.data.isEmpty ? null : res.data.first);
+  }
+
+  @override
+  Future<FDBResponse<List<FDBRow>>> select({required String sql, Map<String, dynamic>? pars}) async {
+    final err = FError.notError();
+
+    if (transactionCtx == null && !await conn.open(null, () => err)) {
+      return _FDBResponse(err, []);
+    }
+
+    final rows = await asyncTry(
+      setError: () => err,
+      action: () async {
+        List<Map<String, Map<String, dynamic>>> rows = [];
+        if (transactionCtx != null) {
+          rows = await transactionCtx!.mappedResultsQuery(sql, substitutionValues: _transformPars(pars));
+        } else {
+          rows = await conn.conn.mappedResultsQuery(sql, substitutionValues: _transformPars(pars));
+        }
 
         final result = <FDBRow>[];
         for (final row in rows) {
@@ -47,7 +77,39 @@ class _FPostgresInstance extends FDBInstance {
       },
     );
 
-    return result ?? [];
+    return _FDBResponse(err, rows ?? []);
+  }
+
+  @override
+  Future<FDBResponse<T?>> transaction<T>(Future<T?> Function(FDBTransaction trx) callback) async {
+    final err = FError.notError();
+
+    if (!await conn.open(null, () => err)) {
+      return _FDBResponse(err, null);
+    }
+
+    final res = await conn.conn.transaction((ctx) async {
+      transactionCtx = ctx;
+      final transaction = _FPostgresTransaction(() => this);
+
+      final res = await asyncTry<T>(
+        setError: () {
+          try {
+            ctx.cancelTransaction(reason: 'uncaught exception error');
+          } catch (_) {}
+
+          return err;
+        },
+        action: () async {
+          return await callback(transaction);
+        },
+      );
+
+      transactionCtx = null;
+      return res;
+    });
+
+    return _FDBResponse(err, res);
   }
 
   @override

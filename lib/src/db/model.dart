@@ -14,3 +14,8 @@ abstract class FDBRow {
 
   T? get<T>(String key, {T? defaultValue});
 }
+
+abstract class FDBResponse<T> {
+  FError get err;
+  T get data;
+}

@@ -8,23 +8,37 @@
 
 library fdb;
 
+import 'package:decimal/decimal.dart';
 import 'package:fdark/maker/postgres_maker.dart';
 import 'package:fdation/fdation.dart';
 import 'package:postgres/postgres.dart';
 
+part 'src/model.dart';
 part 'src/postgres_instance.dart';
+part 'src/postgres_transaction.dart';
+part 'src/utilities.dart';
 
-part 'instance.dart';
-part 'row.dart';
 part 'connection_settings.dart';
-part 'src/row.dart';
+part 'instance.dart';
+part 'model.dart';
 part 'postgres.dart';
+part 'transaction.dart';
 
 abstract class FDB {
-  Future<List<FDBRow>> query(
-    String sql, {
-    FOnError? onError,
-    FSetError? setError,
+  Future<FError> execute({
+    required String sql,
     Map<String, dynamic>? pars,
   });
+
+  Future<FDBResponse<FDBRow?>> executeReturn({
+    required String sql,
+    Map<String, dynamic>? pars,
+  });
+
+  Future<FDBResponse<List<FDBRow>>> select({
+    required String sql,
+    Map<String, dynamic>? pars,
+  });
+
+  Future<FDBResponse<T?>> transaction<T>(Future<T?> Function(FDBTransaction trx) callback);
 }

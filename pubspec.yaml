@@ -1,6 +1,6 @@
 name: fdark
 description: Enhanced API server
-version: 1.0.2
+version: 1.0.3
 homepage: https://github.com/andypangaribuan/fdark
 
 environment:
@@ -11,8 +11,9 @@ dependencies:
   shelf_router: ^1.1.3
   meta: ^1.8.0
   postgres: ^2.5.2
+  decimal: ^2.3.0
   
-  fdation: ^1.0.3
+  fdation: ^1.0.5
   # fdation:
   #   path: /Users/apangaribuan/repo/github/fdation
 

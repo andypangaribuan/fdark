@@ -57,11 +57,34 @@ class _FPostgresDB implements FPostgresDB {
         );
   }
 
-  @override
-  Future<List<FDBRow>> query(String sql, {FOnError? onError, FSetError? setError, Map<String, dynamic>? pars}) async {
+  Future _do(Future Function(FDBInstance instance) callback) async {
     final instance = await _instance;
-    final res = await instance.query(sql, onError: onError, setError: setError, pars: pars);
+    final res = await callback(instance);
     instance.release();
     return res;
+  }
+
+  @override
+  Future<FError> execute({required String sql, Map<String, dynamic>? pars}) async {
+    return await _do((instance) => instance.execute(sql: sql, pars: pars));
+  }
+
+  @override
+  Future<FDBResponse<FDBRow?>> executeReturn({required String sql, Map<String, dynamic>? pars}) async {
+    return await _do((instance) => instance.executeReturn(sql: sql, pars: pars));
+  }
+
+  @override
+  Future<FDBResponse<List<FDBRow>>> select({required String sql, Map<String, dynamic>? pars}) async {
+    return await _do((instance) => instance.select(sql: sql, pars: pars));
+    // final instance = await _instance;
+    // final res = await instance.query(sql: sql, pars: pars);
+    // instance.release();
+    // return res;
+  }
+  
+  @override
+  Future<FDBResponse<T?>> transaction<T>(Future<T?> Function(FDBTransaction trx) callback) async {
+    return await _do((instance) => instance.transaction(callback));
   }
 }

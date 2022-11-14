@@ -19,3 +19,13 @@ abstract class FDBResponse<T> {
   FError get err;
   T get data;
 }
+
+abstract class FDBRowResponse {
+  FError get err;
+  FDBRow? get row;
+}
+
+abstract class FDBListRowResponse {
+  FError get err;
+  List<FDBRow> get rows;
+}

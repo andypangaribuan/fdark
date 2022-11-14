@@ -17,17 +17,17 @@ final FDB db = FPostgresDB(
 );
 
 void main() async {
-  final rRows = await db.select(
+  final dbr = await db.select(
     sql: 'SELECT * FROM users WHERE email=@email',
     pars: {
       'email': 'iam.pangaribuan@gmail.com',
     },
   );
 
-  if (rRows.err.isError) {
-    print(rRows.err.err);
+  if (dbr.err.isError) {
+    print(dbr.err.err);
   } else {
-    final users = rRows.data.loopToList((row) => User.fromRow(row));
+    final users = dbr.rows.loopToList((row) => User.fromRow(row));
     for (final user in users) {
       print(user.name);
     }

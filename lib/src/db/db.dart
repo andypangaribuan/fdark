@@ -30,12 +30,12 @@ abstract class FDB {
     Map<String, dynamic>? pars,
   });
 
-  Future<FDBResponse<FDBRow?>> executeReturn({
+  Future<FDBRowResponse> executeReturn({
     required String sql,
     Map<String, dynamic>? pars,
   });
 
-  Future<FDBResponse<List<FDBRow>>> select({
+  Future<FDBListRowResponse> select({
     required String sql,
     Map<String, dynamic>? pars,
   });

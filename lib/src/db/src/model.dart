@@ -37,3 +37,29 @@ class _FDBResponse<T> extends FDBResponse<T> {
 
   _FDBResponse(this._err, this._data);
 }
+
+class _FDBRowResponse extends FDBRowResponse {
+  final FError _err;
+  final _FDBRow? _row;
+
+  @override
+  FError get err => _err;
+
+  @override
+  FDBRow? get row => _row;
+
+  _FDBRowResponse(this._err, this._row);
+}
+
+class _FDBListRowResponse extends FDBListRowResponse {
+  final FError _err;
+  final List<_FDBRow> _rows;
+
+  @override
+  FError get err => _err;
+
+  @override
+  List<FDBRow> get rows => _rows;
+
+  _FDBListRowResponse(this._err, this._rows);
+}

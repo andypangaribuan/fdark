@@ -40,17 +40,17 @@ class _FPostgresInstance extends FDBInstance {
   }
 
   @override
-  Future<FDBResponse<FDBRow?>> executeReturn({required String sql, Map<String, dynamic>? pars}) async {
+  Future<FDBRowResponse> executeReturn({required String sql, Map<String, dynamic>? pars}) async {
     final res = await select(sql: sql, pars: pars);
-    return _FDBResponse(res.err, res.data.isEmpty ? null : res.data.first);
+    return _FDBRowResponse(res.err, res.rows.isEmpty ? null : res.rows.first as _FDBRow);
   }
 
   @override
-  Future<FDBResponse<List<FDBRow>>> select({required String sql, Map<String, dynamic>? pars}) async {
+  Future<FDBListRowResponse> select({required String sql, Map<String, dynamic>? pars}) async {
     final err = FError.notError();
 
     if (transactionCtx == null && !await conn.open(null, () => err)) {
-      return _FDBResponse(err, []);
+      return _FDBListRowResponse(err, []);
     }
 
     final rows = await asyncTry(
@@ -63,7 +63,7 @@ class _FPostgresInstance extends FDBInstance {
           rows = await conn.conn.mappedResultsQuery(sql, substitutionValues: _transformPars(pars));
         }
 
-        final result = <FDBRow>[];
+        final result = <_FDBRow>[];
         for (final row in rows) {
           final dict = <String, dynamic>{};
           for (final v in row.values) {
@@ -77,7 +77,7 @@ class _FPostgresInstance extends FDBInstance {
       },
     );
 
-    return _FDBResponse(err, rows ?? []);
+    return _FDBListRowResponse(err, rows ?? []);
   }
 
   @override

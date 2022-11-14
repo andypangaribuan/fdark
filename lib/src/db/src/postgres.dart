@@ -70,17 +70,13 @@ class _FPostgresDB implements FPostgresDB {
   }
 
   @override
-  Future<FDBResponse<FDBRow?>> executeReturn({required String sql, Map<String, dynamic>? pars}) async {
+  Future<FDBRowResponse> executeReturn({required String sql, Map<String, dynamic>? pars}) async {
     return await _do((instance) => instance.executeReturn(sql: sql, pars: pars));
   }
 
   @override
-  Future<FDBResponse<List<FDBRow>>> select({required String sql, Map<String, dynamic>? pars}) async {
+  Future<FDBListRowResponse> select({required String sql, Map<String, dynamic>? pars}) async {
     return await _do((instance) => instance.select(sql: sql, pars: pars));
-    // final instance = await _instance;
-    // final res = await instance.query(sql: sql, pars: pars);
-    // instance.release();
-    // return res;
   }
   
   @override

@@ -20,12 +20,12 @@ class _FPostgresTransaction extends FDBTransaction {
   }
 
   @override
-  Future<FDBResponse<FDBRow?>> executeReturn({required String sql, Map<String, dynamic>? pars}) async {
+  Future<FDBRowResponse> executeReturn({required String sql, Map<String, dynamic>? pars}) async {
     return await instance().executeReturn(sql: sql, pars: pars);
   }
 
   @override
-  Future<FDBResponse<List<FDBRow>>> select({required String sql, Map<String, dynamic>? pars}) async {
+  Future<FDBListRowResponse> select({required String sql, Map<String, dynamic>? pars}) async {
     return await instance().select(sql: sql, pars: pars);
   }
   

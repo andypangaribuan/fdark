@@ -1,9 +1,14 @@
 # CHANGELOG
 All notable changes to this project will be documented in this file.
 
+## 1.0.4
+### Modified
+* result on all database function, be more specific
+
 ## 1.0.3
 ### Renamed
 * database query to select
+
 ### Added
 * database function for execute, executeReturn, and transaction
 * decimal type transformation when execute to database

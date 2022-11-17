@@ -8,7 +8,6 @@
 
 part of fdb;
 
-
 class _FPostgresTransaction extends FDBTransaction {
   _FPostgresInstance Function() instance;
 
@@ -28,10 +27,9 @@ class _FPostgresTransaction extends FDBTransaction {
   Future<FDBListRowResponse> select({required String sql, Map<String, dynamic>? pars}) async {
     return await instance().select(sql: sql, pars: pars);
   }
-  
+
   @override
   void cancel({String? reason}) {
     instance().transactionCtx?.cancelTransaction(reason: reason);
   }
-  
 }

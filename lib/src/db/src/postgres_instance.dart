@@ -29,9 +29,9 @@ class _FPostgresInstance extends FDBInstance {
       setError: () => err,
       action: () async {
         if (transactionCtx != null) {
-          await transactionCtx?.execute(sql, substitutionValues: _transformPars(pars));
+          await transactionCtx?.execute(sql.trim(), substitutionValues: _transformPars(pars));
         } else {
-          await conn.conn.execute(sql, substitutionValues: _transformPars(pars));
+          await conn.conn.execute(sql.trim(), substitutionValues: _transformPars(pars));
         }
       },
     );
@@ -58,9 +58,9 @@ class _FPostgresInstance extends FDBInstance {
       action: () async {
         List<Map<String, Map<String, dynamic>>> rows = [];
         if (transactionCtx != null) {
-          rows = await transactionCtx!.mappedResultsQuery(sql, substitutionValues: _transformPars(pars));
+          rows = await transactionCtx!.mappedResultsQuery(sql.trim(), substitutionValues: _transformPars(pars));
         } else {
-          rows = await conn.conn.mappedResultsQuery(sql, substitutionValues: _transformPars(pars));
+          rows = await conn.conn.mappedResultsQuery(sql.trim(), substitutionValues: _transformPars(pars));
         }
 
         final result = <_FDBRow>[];

@@ -19,16 +19,17 @@ class _FuseAPI implements FuseAPI {
   _FuseAPI({this.restPort, this.grpcPort});
 
   @override
-  void serve({required Function(FuseRouter router) routes}) async {
-    late final router = _FuseRouter();
-
-    if (restPort != null) {
-      routes(router);
-      _runShelf(restPort!, router);
+  Future<void> restfulService({required Function(FuseRouter router) routes}) async {
+    if (restPort == null) {
+      return;
     }
+
+    late final router = _FuseRouter();
+    routes(router);
+    await _runShelf(restPort!, router);
   }
 
-  void _runShelf(int port, _FuseRouter fr) async {
+  Future<void> _runShelf(int port, _FuseRouter fr) async {
     final router = Router();
 
     for (var routerHandler in fr._routeHandlers) {
@@ -110,5 +111,20 @@ class _FuseAPI implements FuseAPI {
     }
 
     return Response.internalServerError(body: 'unhandled response model');
+  }
+
+  @override
+  Future<void> grpcServices({required List<grpc.Service> services}) async {
+    if (grpcPort == null) {
+      return;
+    }
+
+    final server = grpc.Server(
+      services,
+      const <grpc.Interceptor>[],
+      grpc.CodecRegistry(codecs: const [grpc.GzipCodec(), grpc.IdentityCodec()]),
+    );
+
+    await server.serve(port: grpcPort);
   }
 }

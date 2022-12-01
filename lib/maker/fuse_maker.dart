@@ -10,6 +10,7 @@ library fuse_maker;
 
 import 'package:fdark/src/fuse/fuse_api.dart';
 import 'package:fdation/fdation.dart';
+import 'package:grpc/grpc.dart' as grpc;
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_router/shelf_router.dart';

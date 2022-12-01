@@ -1,6 +1,12 @@
 # CHANGELOG
 All notable changes to this project will be documented in this file.
 
+## 1.0.5
+### Modified
+* serve to restfulService
+### Added
+* grpc
+
 ## 1.0.4
 ### Modified
 * result on all database function, be more specific

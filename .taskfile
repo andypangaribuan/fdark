@@ -46,7 +46,7 @@ function dry-run {
 }
 
 #: publish project to pub.dev
-function build {
+function publish {
     fvm flutter pub publish
 }
 

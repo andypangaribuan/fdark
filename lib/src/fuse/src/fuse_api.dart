@@ -99,6 +99,14 @@ class _FuseAPI implements FuseAPI {
 
   @override
   Response sendResponse(FuseResponseModel res) {
+    if (res.meta.status == '') {
+      return Response(
+        res.meta.code,
+        body: res.data,
+        headers: _jsonHeaders,
+      );
+    }
+
     switch (res.meta.code) {
       case 200:
         return Response.ok(

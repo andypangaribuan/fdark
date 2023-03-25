@@ -32,6 +32,17 @@ class _FuseContext implements FuseContext {
   }
 
   @override
+  FuseResponse raw(int code, Object data) {
+    return _FuseResponse(FuseResponseModel(
+      data: data,
+      meta: FuseResponseMetaModel(
+        code: code,
+        status: '',
+      ),
+    ));
+  }
+
+  @override
   FuseResponse ok(Object? data, {String? message, address, error, Object? metaData, Map<String, dynamic>? customMeta}) {
     return _FuseResponse(_getRes(200, 'success', data, message, address, error, metaData, customMeta));
   }

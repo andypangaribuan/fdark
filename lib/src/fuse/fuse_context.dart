@@ -19,6 +19,8 @@ abstract class FuseAuthContext {
 abstract class FuseContext {
   FuseHeader get header;
 
+  FuseResponse raw(int code, Object data);
+
   FuseResponse ok(Object? data, {String? message, address, error, Object? metaData, Map<String, dynamic>? customMeta});
 
   FuseResponse notFound({Object? data, String? message, address, error, Object? metaData, Map<String, dynamic>? customMeta});
